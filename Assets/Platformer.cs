@@ -6,7 +6,39 @@ public class Platformer : MonoBehaviour
 {
     Rigidbody2D rb;
 
+    void Start()
+    {
+        rb = GetComponent<Rigidbody2D>();
+
+        baseSpeed = speed;
+
+        additionalJumps = defaultAdditionalJumps;
+    }
+
+    void Update()
+    {
+        Move();
+        Jump();
+        BetterJump();
+        CheckIfGrounded();
+        DashCheck();
+    }
+
+    [Header("Movement Settings")]
     public float speed;
+
+
+    void Move() 
+    {
+        float x = Input.GetAxisRaw("Horizontal");
+
+        float moveBy = x * speed;
+
+        rb.velocity = new Vector2(moveBy, rb.velocity.y);
+    }
+
+    [Space(10)]
+    [Header("Jump Settings")]
     public float jumpForce;
 
     public float fallMultiplier = 2.5f;
@@ -24,32 +56,6 @@ public class Platformer : MonoBehaviour
     int additionalJumps;
 
 
-
-    void Start()
-    {
-        rb = GetComponent<Rigidbody2D>();
-
-        additionalJumps = defaultAdditionalJumps;
-    }
-
-    void Update()
-    {
-        Move();
-        Jump();
-        BetterJump();
-        CheckIfGrounded();
-    }
-
-
-    void Move() 
-    {
-        float x = Input.GetAxisRaw("Horizontal");
-
-        float moveBy = x * speed;
-
-        rb.velocity = new Vector2(moveBy, rb.velocity.y);
-    }
-
     void Jump() 
     {
         if (Input.GetKeyDown(KeyCode.Space) && (isGrounded || Time.time - lastTimeGrounded <=
@@ -66,7 +72,7 @@ public class Platformer : MonoBehaviour
         {
             rb.velocity += Vector2.up * Physics2D.gravity * (fallMultiplier - 1) * Time.deltaTime;
         } 
-        else if (rb.velocity.y > 0 && !Input.GetKey(KeyCode.Space)) 
+        else if (rb.velocity.y > 0 && !Input.GetKeyDown(KeyCode.Space)) 
         {
             rb.velocity += Vector2.up * Physics2D.gravity * (lowJumpMultiplier - 1) * Time.deltaTime;
         }   
@@ -91,5 +97,36 @@ public class Platformer : MonoBehaviour
             isGrounded = false;
         }
     }
+    [Space(10)]
+    [Header("Dash Settings")]
+    public float multiplier;
+    public float duration, baseSpeed, delay;
+    bool isDashing = false, canDash = true;
+    void DashCheck()
+    {
+        float fire1 = Input.GetAxisRaw("Fire1");
+        if(fire1 >= 0.1f && canDash)
+        {
+            DashStart();
+        }
+    }
+    void DashStart()
+    {
+        isDashing = true;
+        canDash = false;
+        speed *= multiplier;
+        Invoke("DashStop", duration);
+    }
+    void DashStop()
+    {
+        speed = baseSpeed;
+        isDashing = false;
+        Invoke("DashDelay", delay);
+    }
+    void DashDelay()
+    {
+        canDash = true;
+    }
+
 
 }
