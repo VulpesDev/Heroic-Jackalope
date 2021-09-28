@@ -13,7 +13,30 @@ public class Platformer : MonoBehaviour
         baseSpeed = speed;
 
         additionalJumps = defaultAdditionalJumps;
+
+        GameObject manager = Instantiate(Resources.Load<GameObject>("Manager"));
+
+        mngr = manager.GetComponent<Manager>();
+        
     }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(isGroundedChecker.position, checkGroundRadius);
+    }
+
+    string dangerTag = "Danger";
+    Manager mngr;
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(collision.collider.CompareTag(dangerTag))
+        {
+            mngr.Reload();
+        }
+    }
+
 
     void Update()
     {
@@ -127,6 +150,4 @@ public class Platformer : MonoBehaviour
     {
         canDash = true;
     }
-
-
 }
