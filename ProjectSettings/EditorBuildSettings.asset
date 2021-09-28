@@ -10,10 +10,10 @@ EditorBuildSettings:
     guid: 269952dcad6e9954fa6db98f72bf200a
   - enabled: 1
     path: Assets/Scenes/Basic 1.unity
-    guid: 2014a56a0d807014391abb9c79f34756
+    guid: 955615dce74c58d42bf25792beeb6104
   - enabled: 1
     path: Assets/Scenes/Basic 2.unity
-    guid: 955615dce74c58d42bf25792beeb6104
+    guid: 2014a56a0d807014391abb9c79f34756
   - enabled: 1
     path: Assets/Scenes/Jump.unity
     guid: cfc6b6d191a5bab4c8ba878b44a0beb2
